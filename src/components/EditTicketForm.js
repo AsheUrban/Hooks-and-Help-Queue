@@ -1,6 +1,6 @@
-import React from "react";
-import ReusableForm from "./ReusableForm";
-import PropTypes from "prop-types";
+import React from 'react';
+import ReusableForm from './ReusableForm';
+import PropTypes from 'prop-types';
 
 function EditTicketForm (props) {
   const { ticket } = props;
@@ -19,7 +19,7 @@ function EditTicketForm (props) {
     <React.Fragment>
       <ReusableForm 
         formSubmissionHandler={handleEditTicketFormSubmission} 
-        buttonText="Update Ticket" />
+        buttonText='Update Ticket' />
     </React.Fragment>
   );
 }

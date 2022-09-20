@@ -4,7 +4,7 @@ import TicketList from './TicketList';
 import EditTicketForm from './EditTicketForm';
 import TicketDetail from './TicketDetail';
 import { useState, useEffect } from 'react';
-import { collection, addDoc, doc, updateDoc, onSnapshot, deleteDoc } from "firebase/firestore";
+import { collection, addDoc, doc, updateDoc, onSnapshot, deleteDoc } from 'firebase/firestore';
 import db from './../firebase.js'
 
 function TicketControl() {
@@ -17,7 +17,7 @@ function TicketControl() {
 
   useEffect(() => { 
     const unSubscribe = onSnapshot(
-      collection(db, "tickets"), 
+      collection(db, 'tickets'), 
       (collectionSnapshot) => {
         const tickets = [];
         collectionSnapshot.forEach((doc) => {
@@ -49,9 +49,8 @@ function TicketControl() {
     }
   }
 
-  const handleDeletingTicket = (id) => {
-    const newMainTicketList = mainTicketList.filter(ticket => ticket.id !== id);
-    setMainTicketList(newMainTicketList);
+  const handleDeletingTicket = async (id) => {
+    await deleteDoc(doc(db, 'tickets', id));
     setSelectedTicket(null);
   }
 
@@ -59,17 +58,15 @@ function TicketControl() {
     setEditing(true);
   }
 
-  const handleEditingTicketInList = (ticketToEdit) => {
-    const editedMainTicketList = mainTicketList
-    .filter(ticket => ticket.id !== selectedTicket.id)
-    .concat(ticketToEdit);
-    setMainTicketList(editedMainTicketList);
+  const handleEditingTicketInList = async (ticketToEdit) => {
+    const ticketRef = doc(db, 'tickets', ticketToEdit.id);
+    await updateDoc(ticketRef, ticketToEdit);
     setEditing(false);
     setSelectedTicket(null);
   }
 
   const handleAddingNewTicketToList = async (newTicketData) => {
-    const collectionRef = collection(db, "tickets");
+    const collectionRef = collection(db, 'tickets');
     await addDoc(collectionRef, newTicketData);
     setFormVisibleOnPage(false);
   }
@@ -89,25 +86,25 @@ function TicketControl() {
         <EditTicketForm 
           ticket = {selectedTicket} 
           onEditTicket = {handleEditingTicketInList} />;
-      buttonText = "Return to Ticket List";
+      buttonText = 'Return to Ticket List';
     } else if (selectedTicket != null) {
       currentlyVisibleState = 
         <TicketDetail 
           ticket={selectedTicket} 
           onClickingDelete={handleDeletingTicket}
           onClickingEdit = {handleEditClick} />;
-      buttonText = "Return to Ticket List";
+      buttonText = 'Return to Ticket List';
     } else if (formVisibleOnPage) {
       currentlyVisibleState = 
         <NewTicketForm 
           onNewTicketCreation={handleAddingNewTicketToList}/>;
-      buttonText = "Return to Ticket List"; 
+      buttonText = 'Return to Ticket List'; 
     } else {
       currentlyVisibleState = 
         <TicketList 
           onTicketSelection={handleChangingSelectedTicket} 
           ticketList={mainTicketList} />;
-      buttonText = "Add Ticket"; 
+      buttonText = 'Add Ticket'; 
     }
     return (
       <React.Fragment>
