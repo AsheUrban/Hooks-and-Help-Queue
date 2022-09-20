@@ -5,7 +5,8 @@ import EditTicketForm from './EditTicketForm';
 import TicketDetail from './TicketDetail';
 import { useState, useEffect } from 'react';
 import { collection, addDoc, doc, updateDoc, onSnapshot, deleteDoc } from 'firebase/firestore';
-import { db } from './../firebase.js'
+import { db, auth } from './../firebase.js'
+import { formatDistanceToNow } from 'date-fns';
 
 function TicketControl() {
 
@@ -15,17 +16,40 @@ function TicketControl() {
   const [editing, setEditing] = useState(false);
   const [error, setError] = useState(null);
 
+  useEffect(() => {
+    function updateTicketElapsedWaitTime() {
+      const newMainTicketList = mainTicketList.map(ticket => {
+        const newFormattedWaitTime = formatDistanceToNow(ticket.timeOpen);
+        return {...ticket, formattedWaitTime: newFormattedWaitTime};
+      });
+      setMainTicketList(newMainTicketList);
+    }
+
+    const waitTimeUpdateTimer = setInterval(() =>
+      updateTicketElapsedWaitTime(), 
+      60000
+    );
+
+    return function cleanup() {
+      clearInterval(waitTimeUpdateTimer);
+    }
+  }, [mainTicketList])
+
   useEffect(() => { 
     const unSubscribe = onSnapshot(
       collection(db, 'tickets'), 
       (collectionSnapshot) => {
         const tickets = [];
         collectionSnapshot.forEach((doc) => {
+          const timeOpen = doc.get('timeOpen', {serverTimestamps: "estimate"}).toDate();
+          const jsDate = new Date(timeOpen);
             tickets.push({
               ... doc.data(), // spread operator allows us to comment out the keyvalue pairs below
               // names: doc.data().names, 
               // location: doc.data().location, 
-              // issue: doc.data().issue, 
+              // issue: doc.data().issue,
+              timeOpen: jsDate,
+              formattedWaitTime: formatDistanceToNow(jsDate),
               id: doc.id
             });
         });
@@ -77,42 +101,49 @@ function TicketControl() {
     setSelectedTicket(selection);
   }
 
+  if (auth.currentUser == null) {
+    return (
+      <React.Fragment>
+        <h1>You must be signed in to access the queue.</h1>
+      </React.Fragment>
+    )
+  } else if (auth.currentUser != null) {
+
     let currentlyVisibleState = null;
     let buttonText = null; 
+
     if (error) {
       currentlyVisibleState = <p>There was an error: {error}</p>
     } else if (editing) {      
-      currentlyVisibleState = 
-        <EditTicketForm 
-          ticket = {selectedTicket} 
-          onEditTicket = {handleEditingTicketInList} />;
+      currentlyVisibleState = <EditTicketForm 
+      ticket = {selectedTicket} 
+      onEditTicket = {handleEditingTicketInList} />
       buttonText = 'Return to Ticket List';
     } else if (selectedTicket != null) {
-      currentlyVisibleState = 
-        <TicketDetail 
-          ticket={selectedTicket} 
-          onClickingDelete={handleDeletingTicket}
-          onClickingEdit = {handleEditClick} />;
+      currentlyVisibleState = <TicketDetail 
+      ticket={selectedTicket} 
+      onClickingDelete={handleDeletingTicket}
+      onClickingEdit = {handleEditClick} />
       buttonText = 'Return to Ticket List';
     } else if (formVisibleOnPage) {
-      currentlyVisibleState = 
-        <NewTicketForm 
-          onNewTicketCreation={handleAddingNewTicketToList}/>;
+      currentlyVisibleState = <NewTicketForm 
+      onNewTicketCreation={handleAddingNewTicketToList}/>;
       buttonText = 'Return to Ticket List'; 
     } else {
-      currentlyVisibleState = 
-        <TicketList 
-          onTicketSelection={handleChangingSelectedTicket} 
-          ticketList={mainTicketList} />;
+      currentlyVisibleState = <TicketList 
+      onTicketSelection={handleChangingSelectedTicket} 
+      ticketList={mainTicketList} />;
       buttonText = 'Add Ticket'; 
     }
     return (
       <React.Fragment>
         {currentlyVisibleState}
-        {error ? null : <button onClick={handleClick}>{buttonText}</button>}
+        {error ? null : <button onClick={handleClick}>{buttonText}</button>} 
       </React.Fragment>
     );
+  }
 }
+
 
 export default TicketControl;
 
