@@ -12,20 +12,9 @@ function TicketControl() {
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [editing, setEditing] = useState(false);
 
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     formVisibleOnPage: false,
-  //     mainTicketList: [],
-  //     selectedTicket: null,
-  //     editing: false
-  //   };
-  // }
-
   const handleClick = () => {
     if (selectedTicket != null) {
       setFormVisibleOnPage(false);
-      // new code!
       setSelectedTicket(null);
       setEditing(false);
     } else {
@@ -36,38 +25,29 @@ function TicketControl() {
   const handleDeletingTicket = (id) => {
     const newMainTicketList = mainTicketList.filter(ticket => ticket.id !== id);
     setMainTicketList(newMainTicketList);
-    // new code!
     setSelectedTicket(null);
   }
 
   const handleEditClick = () => {
-    // new code!
     setEditing(true);
   }
 
   const handleEditingTicketInList = (ticketToEdit) => {
     const editedMainTicketList = mainTicketList
-    // new code: selectedTicket.id
     .filter(ticket => ticket.id !== selectedTicket.id)
     .concat(ticketToEdit);
     setMainTicketList(editedMainTicketList);
-    // new code!
     setEditing(false);
     setSelectedTicket(null);
   }
 
   const handleAddingNewTicketToList = (newTicket) => {
-    // new code!
     const newMainTicketList = mainTicketList.concat(newTicket);
-    // new code!
     setMainTicketList(newMainTicketList);
     setFormVisibleOnPage(false)
   }
   const handleChangingSelectedTicket = (id) => {
-    // new code: updated variable name to 'selection'
-    // so there's no clash with the state variable 'selectedTicket'
     const selection = mainTicketList.filter(ticket => ticket.id === id)[0];
-    // new code!
     setSelectedTicket(selection);
   }
 
