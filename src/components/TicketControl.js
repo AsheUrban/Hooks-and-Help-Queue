@@ -5,7 +5,7 @@ import EditTicketForm from './EditTicketForm';
 import TicketDetail from './TicketDetail';
 import { useState, useEffect } from 'react';
 import { collection, addDoc, doc, updateDoc, onSnapshot, deleteDoc } from 'firebase/firestore';
-import db from './../firebase.js'
+import { db } from './../firebase.js'
 
 function TicketControl() {
 
