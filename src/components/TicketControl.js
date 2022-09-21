@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import { collection, addDoc, doc, updateDoc, onSnapshot, deleteDoc, query, orderBy } from 'firebase/firestore';
 import { db, auth } from './../firebase.js'
 import { formatDistanceToNow } from 'date-fns';
+import styled from 'styled-components';
 
 function TicketControl() {
 
@@ -15,6 +16,20 @@ function TicketControl() {
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [editing, setEditing] = useState(false);
   const [error, setError] = useState(null);
+
+  const Button = styled.button`
+    background-color: #6495ED; /* Cornflower Blue */
+    border: none;
+    color: #F8D86E;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    font-size: 16px;
+    margin-top: 40px;
+    border-radius: 10px;
+    cursor: pointer;
+  `;
 
   useEffect(() => {
     function updateTicketElapsedWaitTime() {
@@ -139,10 +154,10 @@ function TicketControl() {
       buttonText = 'Add Ticket'; 
     }
     return (
-      <React.Fragment>
+      <>
         {currentlyVisibleState}
-        {error ? null : <button onClick={handleClick}>{buttonText}</button>} 
-      </React.Fragment>
+        {error ? null : <Button className='App' onClick={handleClick}>{buttonText}</Button>} 
+      </>
     );
   }
 }
