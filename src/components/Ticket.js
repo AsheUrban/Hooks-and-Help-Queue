@@ -8,19 +8,24 @@ function Ticket(props){
   background-color: #f5b700;
   width: 300px;
   margin: auto;
-  border: 2px solid #fffbc8;
   margin-top: 15px;
-  padding: 10px;
+  margin-bottom: 15px;
+  border: 2px solid #fffbc8;
   text-align: center;
   border-radius: 10px;
   `;
+
+  const H3 = styled.h3`
+  font-size: 22px;
+  color: #FFFBC8;
+  `
 
   return (
     
     <React.Fragment>
       <HelpQueueTickets>
       <div onClick = {() => props.whenTicketClicked(props.id)}>
-        <h3>{props.location} - {props.names}</h3>
+        <H3>{props.location} - {props.names}</H3>
         <p><em>{props.issue}</em></p>
         <p><em>{props.formattedWaitTime}</em></p>
       </div>

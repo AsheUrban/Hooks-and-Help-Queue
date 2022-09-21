@@ -19,14 +19,13 @@ function TicketControl() {
 
   const Button = styled.button`
     background-color: #6495ED; /* Cornflower Blue */
-    border: none;
-    color: #F8D86E;
+    border: 1px solid #FFFBC8;
+    color: #FFFBC8;
     padding: 15px 32px;
     text-align: center;
     text-decoration: none;
     display: flex;
     font-size: 16px;
-    margin-top: 40px;
     border-radius: 10px;
     cursor: pointer;
   `;
@@ -34,6 +33,13 @@ function TicketControl() {
   const Center = styled.div`
     display: flex;
     justify-content: center;
+    text-align: center;
+    width: 1230px;
+    color: #FFFBC8;
+    padding: 25px;
+    margin: auto;
+    background-color: #6495ED;
+    border-radius: 10px;
   `;
 
   useEffect(() => {

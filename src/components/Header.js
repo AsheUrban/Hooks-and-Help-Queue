@@ -4,13 +4,17 @@ import styled from 'styled-components';
 
 const HelpQueueHeader = styled.div`
   text-align: center;
-  color: #F8D86E;
+  width: 1230px;
+  color: #FFFBC8;
   padding: 25px;
+  margin: auto;
+  margin-top: 3px;
   background-color: #6495ED;
+  border-radius: 10px;
 `;
 
 const H1 = styled.h1`
-  font-size: 36px;
+  font-size: 59px;
 `
 
 const Center = styled.div`
