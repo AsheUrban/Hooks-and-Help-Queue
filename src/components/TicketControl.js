@@ -31,6 +31,11 @@ function TicketControl() {
     cursor: pointer;
   `;
 
+  const Center = styled.div`
+    display: flex;
+    justify-content: center;
+  `;
+
   useEffect(() => {
     function updateTicketElapsedWaitTime() {
       const newMainTicketList = mainTicketList.map(ticket => {
@@ -156,7 +161,9 @@ function TicketControl() {
     return (
       <>
         {currentlyVisibleState}
-        {error ? null : <Button className='App' onClick={handleClick}>{buttonText}</Button>} 
+        <Center>
+          {error ? null : <Button className='App' onClick={handleClick}>{buttonText}</Button>} 
+        </Center>
       </>
     );
   }

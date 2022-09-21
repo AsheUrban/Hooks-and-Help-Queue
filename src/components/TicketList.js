@@ -7,15 +7,18 @@ function TicketList(props){
 
   const HelpQueueTickets = styled.ul`
   
-  background-color: #f5b700;
-  width: 300px;
+  background-color: #F8D86E;
+  width: 1200px;
   margin: auto;
-  border: 4px inset lightblue
+  border: #FFBC8;
+  padding: 25px;
+  border-radius: 10px;
   `;
 
   return (
     
     <React.Fragment>
+      <br></br>
       <HelpQueueTickets>
       {props.ticketList.map((ticket) =>
         <Ticket 
